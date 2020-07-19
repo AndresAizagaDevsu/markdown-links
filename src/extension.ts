@@ -103,6 +103,8 @@ const watch = (
 };
 
 export function activate(context: vscode.ExtensionContext) {
+
+
   context.subscriptions.push(
     vscode.commands.registerCommand("markdown-links.showGraph", async () => {
       const column = getColumnSetting("showColumn");
@@ -123,8 +125,11 @@ export function activate(context: vscode.ExtensionContext) {
         );
         return;
       }
+
       const engine = DendronEngine.getOrCreateEngine({ root: vscode.workspace.rootPath});
-      await engine.init();
+      if (!engine.initialized) {
+        await engine.init();
+      }
 
       const graph: Graph = {
         nodes: [],
